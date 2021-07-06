@@ -1,0 +1,15 @@
+{
+    "name": "inline-table-rolls",
+    "title": "Inline Table Rolls",
+    "description": "A module that enables rolling and drawing results from tables from within chat messages.",
+    "author": "spaceman",
+    "version": "0.0.1",
+    "minimumCoreVersion": "0.8.6",
+    "compatibleCoreVersion":"0.8.8",
+    "systems": [
+      "dnd5e"
+    ],
+    "scripts": [
+      "./scripts/inline-tables.js"
+    ]
+  }
