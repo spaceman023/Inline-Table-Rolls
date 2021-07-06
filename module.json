@@ -11,5 +11,8 @@
     ],
     "scripts": [
       "./scripts/inline-tables.js"
-    ]
+    ],
+    "manifest": "https://raw.githubusercontent.com/spaceman02-ops/Inline-Table-Rolls/main/module.json",
+    "download": "https://github.com/spaceman02-ops/Inline-Table-Rolls/archive/refs/heads/main.zip",
+    "readme": "https://github.com/spaceman02-ops/Inline-Table-Rolls/blob/main/readme.md"
   }
