@@ -1,5 +1,7 @@
 Hooks.on("createChatMessage", (a) => {
-  if (a.data.content.match(/\[\[\#(.*?)\]\]/g)) parseInlineTables(a);
+  if (game.user.isGM) {
+    if (a.data.content.match(/\[\[\#(.*?)\]\]/g)) parseInlineTables(a);
+  }
 });
 
 const parseInlineTables = async (a) => {
