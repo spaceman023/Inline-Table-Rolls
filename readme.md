@@ -2,7 +2,7 @@
 
 This module for Foundry Virtual Tabletop allows users to roll on tables within a chat message. Once installed, a user can type the name of the table surrounded by brackets with a leading dash like so:
 
-[![Youtube Link](https://i.imgur.com/U7JyFDC.jpg)]https://www.youtube.com/watch?v=CZyB0IRB0GE
+[![Youtube Link](https://i.imgur.com/U7JyFDC.jpg)](https://www.youtube.com/watch?v=CZyB0IRB0GE)
 
 ![Example Image 1](https://i.imgur.com/pDUiZyI.png)
 
