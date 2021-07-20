@@ -1,6 +1,6 @@
 **Inline Table Rolls**
 
-See the moodule in action on Youtube below:
+See the module in action on Youtube below:
 [![Youtube Link](https://i.imgur.com/U7JyFDC.jpg)](https://www.youtube.com/watch?v=CZyB0IRB0GE)
 
 This module for Foundry Virtual Tabletop allows users to roll on tables within a chat message. Once installed, a user can type the name of the table surrounded by brackets with a leading dash like so:
