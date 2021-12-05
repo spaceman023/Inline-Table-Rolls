@@ -1,7 +1,5 @@
 Hooks.on("createChatMessage", (a) => {
-  if (game.user.isGM) {
-    if (a.data.content.match(/\[\[\#(.*?)\]\]/g)) parseInlineTables(a);
-  }
+  if (a.data.content.match(/\[\[\#(.*?)\]\]/g)) parseInlineTables(a);
 });
 
 const parseInlineTables = async (a) => {
@@ -10,7 +8,9 @@ const parseInlineTables = async (a) => {
   let depth = 0;
   let newContent = await handleMatches(content, depth);
   let theMessage = game.messages.get(finalId);
-  await theMessage.update({ content: newContent });
+  if (theMessage.data.user === game.userId) {
+    await theMessage.update({ content: newContent })
+  };
 };
 
 const handleMatches = async (content, depth) => {
