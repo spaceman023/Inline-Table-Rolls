@@ -6,7 +6,7 @@ async function parseInlineTables(a) {
   let { content } = { ...a.data };
   const finalId = a.data._id;
   const depth = 0;
-  const newContent = await handleMatches(content, depth);
+  let newContent = await handleMatches(content, depth);
   const theMessage = game.messages.get(finalId);
   if (theMessage.data.user === game.userId) {
     await theMessage.update({ content: newContent });
