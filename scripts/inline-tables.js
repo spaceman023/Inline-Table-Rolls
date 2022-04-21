@@ -10,12 +10,10 @@ async function parseInlineTables(a) {
   const theMessage = game.messages.get(finalId);
   if (theMessage.data.user === game.userId) {
     await theMessage.update({ content: newContent });
-    newContent = theMessage.data.content;
+    newContent = theMessage
     await theMessage.delete();
     await ChatMessage.create({
-      user: game.user.id,
-      speaker: ChatMessage.getSpeaker(),
-      content: newContent,
+      ...newContent.data
     });
   }
 }
@@ -34,6 +32,7 @@ async function handleMatches(content, depth) {
   }
   return content;
 }
+
 async function rollTableAndReplaceContent(content, match) {
   let table = match.replace(`[[#`, ``).replace(`]]`, ``);
   let roll;
@@ -54,6 +53,7 @@ async function rollTableAndReplaceContent(content, match) {
   }
   return content.replace(match, lf.format(resArray));
 }
+
 async function findCompendiumTable(name) {
   const pack = game.packs.find((p) => {
     if (p.index.getName(name)) {
