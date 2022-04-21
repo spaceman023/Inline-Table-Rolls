@@ -44,7 +44,7 @@ async function rollTableAndReplaceContent(content, match) {
     table = game.tables.getName(table);
   }
   if (table) {
-    roll = await table.roll();
+    roll = await table.draw({ displayChat: false });
   } else {
     throw new Error('Table not found');
   }
