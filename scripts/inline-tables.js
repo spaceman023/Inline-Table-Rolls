@@ -1,19 +1,21 @@
 Hooks.on('createChatMessage', (a) => {
-  if (a.data.content.match(/\[\[#(.*?)\]\]/g)) parseInlineTables(a);
+  if (a.content.match(/\[\[#(.*?)\]\]/g)) parseInlineTables(a);
 });
 
 async function parseInlineTables(a) {
-  let { content } = { ...a.data };
-  const finalId = a.data._id;
+  
+  let { content } = { ...a };
+  const finalId = a._id;
   const depth = 0;
   let newContent = await handleMatches(content, depth);
   const theMessage = game.messages.get(finalId);
-  if (theMessage.data.user === game.userId) {
+        
+  if (theMessage.user._id === game.userId) {
     await theMessage.update({ content: newContent });
     newContent = theMessage
     await theMessage.delete();
     await ChatMessage.create({
-      ...newContent.data
+      ...newContent
     });
   }
 }
@@ -30,6 +32,7 @@ async function handleMatches(content, depth) {
     depth += 1;
     return handleMatches(content, depth);
   }
+        
   return content;
 }
 
@@ -41,7 +44,9 @@ async function rollTableAndReplaceContent(content, match) {
   if (!game.tables.getName(table)) {
     table = await findCompendiumTable(table);
   } else {
+
     table = game.tables.getName(table);
+          
   }
   if (table) {
     roll = await table.draw({ displayChat: false });
@@ -67,4 +72,4 @@ async function findCompendiumTable(name) {
   const entry = pack.index.getName(name);
   const table = await pack.getDocument(entry._id);
   return table;
-}
+
