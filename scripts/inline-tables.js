@@ -59,6 +59,7 @@ async function rollTableAndReplaceContent(content, match) {
   return content.replace(match, lf.format(resArray));
 }
 
+
 async function findCompendiumTable(name) {
   const pack = game.packs.find((p) => {
     if (p.index.getName(name)) {
@@ -73,3 +74,4 @@ async function findCompendiumTable(name) {
   const table = await pack.getDocument(entry._id);
   return table;
 
+}
