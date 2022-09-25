@@ -2,8 +2,11 @@
 UPDATE:
 You can now specify how many times to roll on a particular table in your inline roll like so:
 [[#?1d4?Monsters]]
+
 [[#?5?Monsters]]
+
 [[#?1d8?Uncommon Loot]]
+
 However, you don't have to specify a number. If no number is specified, the module will assume that you want a single roll.
 
 See the module in action on Youtube below:
