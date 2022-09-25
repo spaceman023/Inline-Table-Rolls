@@ -1,6 +1,7 @@
 **Inline Table Rolls**
 UPDATE:
 You can now specify how many times to roll on a particular table in your inline roll like so:
+
 [[#?1d4?Monsters]]
 
 [[#?5?Monsters]]
