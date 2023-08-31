@@ -1,12 +1,17 @@
 **Inline Table Rolls**
-UPDATE:
+UPDATE 8/31/2023:
+the new syntax uses double carats instead of double brackets to avoid triggering Foundry's builtin inline roll parsing!
+You must update your syntax like so ^^#Table you want to roll^^
+
+
+Rolling multiple results:
 You can now specify how many times to roll on a particular table in your inline roll like so:
 
-[[#?1d4?Monsters]]
+^^#?1d4?Monsters^^
 
-[[#?5?Monsters]]
+^^#?5?Monsters^^
 
-[[#?1d8?Uncommon Loot]]
+^^#?1d8?Uncommon Loot^^
 
 However, you don't have to specify a number. If no number is specified, the module will assume that you want a single roll.
 
