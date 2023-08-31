@@ -3,7 +3,7 @@ Hooks.once("init", async () => {
 });
 
 Hooks.on("createChatMessage", messageData => {
-  if (messageData.content.match(/\[\[#(.*?)\]\]/g)) parseInlineTables(messageData);
+  if (messageData.content.match(/\^\^#(.*?)\^\^/g)) parseInlineTables(messageData);
 });
 
 /**
@@ -27,7 +27,7 @@ async function handleMatches(content, depth = 0) {
     ui.notifications?.warn(`Help I'm trapped in a loop! You're calling the same table in a lower table.`);
     throw new Error(`Help I'm trapped in a loop! You're calling the same table in a lower table.`);
   }
-  const matches = content.match(/\[\[#(.*?)\]\]/g);
+  const matches = content.match(/\^\^#(.*?)\^\^/g);
   if (matches != null) {
     for (const match of matches) {
       content = await getResults(content, match);
@@ -50,8 +50,8 @@ async function getResults(content, match) {
   const numberToDrawFormula = match.match(/\?(.+)\?/g)?.[0]?.replace(/\?/g, "") || "1";
   const numberToDraw = await new Roll(numberToDrawFormula).roll();
   const tableName = match
-    .replace(/\[\[#/g, "")
-    .replace(/\]\]/g, "")
+    .replace(/\^\^#/g, "")
+    .replace(/\^\^/g, "")
     .replace(/\?.+\?/g, "");
   const table = await findTable(tableName);
   const results = await table.drawMany(Number(numberToDraw.total), { displayChat: false });
