@@ -2,8 +2,10 @@ Hooks.once("init", async () => {
   await setDefaultSettings();
 });
 
-Hooks.on("createChatMessage", messageData => {
-  if (messageData.content.match(/\^\^#(.*?)\^\^/g)) parseInlineTables(messageData);
+Hooks.on("createChatMessage", (messageData) => {
+  if (messageData.content.match(/\^\^#(.*?)\^\^/g)) {
+    parseInlineTables(messageData);
+  }
 });
 
 /**
@@ -12,7 +14,7 @@ Hooks.on("createChatMessage", messageData => {
 async function parseInlineTables(messageData) {
   const { content } = messageData;
   const tableChatMessage = game.messages.get(messageData._id);
-  if (tableChatMessage.user._id !== game.userId) return;
+  if (tableChatMessage.author._id !== game.userId) return;
   const newContent = await handleMatches(content);
   const enrichedContent = await TextEditor.enrichHTML(newContent);
   await tableChatMessage.update({ content: enrichedContent });
@@ -21,21 +23,40 @@ async function parseInlineTables(messageData) {
 /**
  * @param {string} content - The content of the identified chat message
  * @returns {string} - The content with the table results inserted
+ *
+ * This function is recursive, it stops when the content no longer
+ * contaisn a match.
  */
 async function handleMatches(content, depth = 0) {
   if (depth > 10) {
-    ui.notifications?.warn(`Help I'm trapped in a loop! You're calling the same table in a lower table.`);
-    throw new Error(`Help I'm trapped in a loop! You're calling the same table in a lower table.`);
+    ui.notifications?.warn(
+      `Help I'm trapped in a loop! You're calling the same table in a lower table.`
+    );
+    throw new Error(
+      `Help I'm trapped in a loop! You're calling the same table in a lower table.`
+    );
   }
-  const matches = content.match(/\^\^#(.*?)\^\^/g);
-  if (matches != null) {
-    for (const match of matches) {
-      content = await getResults(content, match);
+  const matches = content.matchAll(
+    /(?<fullString>\^\^(?:\?(?<number>\d+d?\d*)\?)?#(?<tableName>.*?)\^\^)/g
+  );
+
+  let hasMatches = false;
+
+  for (const match of matches) {
+    if (match.groups.number === undefined) {
+      match.groups.number = "1";
     }
-    depth += 1;
-    return handleMatches(content, depth);
+    content = await getResults(content, match.groups);
+    hasMatches = true;
   }
-  return content;
+
+  if (!hasMatches) {
+    // We found no matches, do not recurse
+    return content;
+  }
+
+  depth += 1;
+  return handleMatches(content, depth);
 }
 
 /**
@@ -47,27 +68,29 @@ async function handleMatches(content, depth = 0) {
  * @returns {string} - The content with the match replaced with the results of the table
  */
 async function getResults(content, match) {
-  const numberToDrawFormula = match.match(/\?(.+)\?/g)?.[0]?.replace(/\?/g, "") || "1";
-  const numberToDraw = await new Roll(numberToDrawFormula).roll();
-  const tableName = match
-    .replace(/\^\^#/g, "")
-    .replace(/\^\^/g, "")
-    .replace(/\?.+\?/g, "");
-  const table = await findTable(tableName);
-  const results = await table.drawMany(Number(numberToDraw.total), { displayChat: false });
+  const numberToDraw = await new Roll(match.number).roll();
+  const table = await findTable(match.tableName);
+  const results = await table.drawMany(Number(numberToDraw.total), {
+    displayChat: false,
+  });
   let resultArray = [];
   for (const result of results.results) {
-    resultArray.push(result.getChatText());
+    resultArray.push(await result.getHTML());
   }
-  return content.replace(match, await formatResult(resultArray));
+  const formattedResult = formatResult(resultArray);
+  let newContent = content.replace(match.fullString, formattedResult);
+  return newContent;
 }
 
 /**
  * @param {string[]} result - The result of the table roll
  * @returns {string} - The formatted result
  */
-async function formatResult(result) {
-  const formatMultipleResults = game.settings.get("Inline-Table-Rolls", "format-multiple-results");
+function formatResult(result) {
+  const formatMultipleResults = game.settings.get(
+    "Inline-Table-Rolls",
+    "format-multiple-results"
+  );
   if (formatMultipleResults) {
     const lf = new Intl.ListFormat("en");
     return lf.format(result);
@@ -84,7 +107,7 @@ async function findTable(name) {
   if (game.tables.getName(name)) {
     table = game.tables.getName(name);
   } else {
-    const pack = game.packs.find(p => {
+    const pack = game.packs.find((p) => {
       if (p.metadata.type !== "RollTable") return false;
       return !!p.index.getName(name);
     });
