@@ -1,0 +1,20 @@
+{
+  "id": "Inline-Table-Rolls",
+  "title": "Inline Table Rolls",
+  "description": "A module that enables rolling and drawing results from tables from within chat messages.",
+  "authors": [
+    {
+    "name":"spaceman"
+    },{
+    "name":"tanglisha"
+    }],
+  "version": "0.2.5",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13"
+  },
+  "scripts": ["./scripts/inline-tables.js"],
+  "manifest": "https://raw.githubusercontent.com/spaceman023/Inline-Table-Rolls/main/module.json",
+  "download": "https://github.com/spaceman023/Inline-Table-Rolls/archive/refs/tags/v0.2.5.zip",
+  "readme": "https://github.com/spaceman023/Inline-Table-Rolls/blob/main/readme.md"
+}
